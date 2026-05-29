@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Quote {
+  id             String   @id @default(cuid())
+  shareId        String   @unique
+  userId         String?
+  selections     Json
+  tier           String
+  consultNeeded  Boolean  @default(false)
+  budgetLow      Int?
+  budgetHigh     Int?
+  contactName    String
+  contactValue   String
+  contactChannel String
+  message        String?
+  status         String   @default("new")
+  lostReason     String?
+  createdAt      DateTime @default(now())
+}
