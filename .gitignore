@@ -23,6 +23,7 @@
 .env*.local
 *.local
 .env*
+!.env.example
 .vercel
 
 # database (SQLite + Litestream)
@@ -55,3 +56,5 @@ next-env.d.ts
 # private outreach contact list (real names = personal data, never commit)
 outreach-contacts.local.md
 *.contacts.local.md
+
+/src/generated/prisma
