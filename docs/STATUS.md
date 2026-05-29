@@ -23,6 +23,8 @@ office-hours → grill-me → plan-eng-review → design-consultation → plan-d
 - [docs/adr/](adr/) — 결정 기록 0001~0008 (0008=shareId 공개URL)
 - [CLAUDE.md](../CLAUDE.md) — 프로젝트 지침
 - [TODOS.md](../TODOS.md) — C단계 엔진·크몽 등록
+- [docs/outreach.md](outreach.md) — **아웃리치 키트**(메시지 템플릿·퍼널 추적) ⭐1순위 과제
+- [docs/SETUP-CHECKLIST.md](SETUP-CHECKLIST.md) — 구현 전 외부 셋업(카카오·mindlogic·Cloudflare·Litestream·NDA)
 - 견적사이트_개발명세서.md — 원본 초안(참고용, 정본 아님)
 - gstack 정본: `~/.gstack/projects/dev-quote-builder/kimjonggun-main-design-20260530-000505.md`
 
