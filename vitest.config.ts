@@ -14,6 +14,8 @@ export default defineConfig({
           include: ["tests/lib/**/*.test.ts", "tests/api/**/*.test.ts"],
           env: { DATABASE_URL: `file:${TEST_DB}` },
           globalSetup: "./tests/setup-db.ts",
+          // 단일 파일 SQLite test.db를 공유하므로 노드 스위트는 순차 실행 (파일 간 경합 방지)
+          fileParallelism: false,
         },
       },
       {
