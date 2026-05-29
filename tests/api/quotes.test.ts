@@ -1,6 +1,10 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { POST } from "@/app/api/quotes/route";
 import { prisma } from "@/lib/db";
+
+vi.mock("@/lib/notify", () => ({
+  notifyNewLead: vi.fn().mockRejectedValue(new Error("notify fail")),
+}));
 
 beforeEach(async () => {
   await prisma.quote.deleteMany();
@@ -57,5 +61,14 @@ describe("POST /api/quotes", () => {
     const { shareId } = await (await POST(req(validBody))).json();
     const saved = await prisma.quote.findUnique({ where: { shareId } });
     expect(saved?.status).toBe("new");
+  });
+
+  it("알림이 실패(reject)해도 저장은 성공 201 + shareId (리드=임계경로)", async () => {
+    const res = await POST(req(validBody));
+    expect(res.status).toBe(201);
+    const { shareId } = await res.json();
+    expect(shareId).toMatch(/^[0-9a-z]{12}$/);
+    const saved = await prisma.quote.findUnique({ where: { shareId } });
+    expect(saved).not.toBeNull();
   });
 });
