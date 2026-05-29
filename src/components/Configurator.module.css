@@ -1,0 +1,29 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 880px) {
+  .layout {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 48px;
+  }
+  .result {
+    position: sticky;
+    top: 80px;
+  }
+}
