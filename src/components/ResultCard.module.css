@@ -1,0 +1,143 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-card);
+  background: var(--canvas);
+}
+
+.live {
+  display: flex;
+  flex-direction: column;
+}
+
+.budget,
+.consult {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.amount {
+  margin: 6px 0 0;
+  font-size: 44px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+.why {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--body);
+}
+
+.whyKey {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-top: 6px;
+  border-top: 1px solid var(--hairline);
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 0;
+}
+
+.col + .col {
+  padding-left: 20px;
+  border-left: 1px solid var(--hairline);
+}
+
+.col:first-child {
+  padding-right: 20px;
+}
+
+.colTitle {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.included {
+  color: var(--accent);
+}
+
+.excluded {
+  color: var(--mute);
+}
+
+.scopeList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scopeItem {
+  font-size: 0.9375rem;
+  color: var(--charcoal);
+  line-height: 1.4;
+}
+
+.consultLead {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--body);
+  line-height: 1.5;
+}
+
+.cta {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 10px 18px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--on-dark);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: opacity 0.15s ease;
+}
+
+.cta:hover {
+  opacity: 0.9;
+}
+
+.footer {
+  margin: 0;
+  padding-top: 4px;
+  font-size: 0.8125rem;
+  color: var(--mute);
+}
+
+@media (max-width: 560px) {
+  .cols {
+    grid-template-columns: 1fr;
+  }
+  .col + .col {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--hairline);
+  }
+  .col:first-child {
+    padding-right: 0;
+  }
+}
