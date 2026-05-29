@@ -47,6 +47,12 @@ describe("classify — 상향(escalator)", () => {
   it("앱 + 규모=중 → mvp(앱바닥) 후 한 칸 → full", () => {
     expect(classify({ ...base, platform: "app", scale: "mid" }).tier).toBe("full");
   });
+  it("앱 + 모듈 3개 → full (앱바닥은 landing에만 적용, 과상향 없음)", () => {
+    expect(classify({ ...withFeats("login", "noti", "pay"), platform: "app" }).tier).toBe("full");
+  });
+  it("규모=중 + 모듈 3개 → full (사다리 상한 캡)", () => {
+    expect(classify({ ...withFeats("login", "noti", "pay"), scale: "mid" }).tier).toBe("full");
+  });
 });
 
 describe("classify — 상담필요 오버라이드(하나라도)", () => {
