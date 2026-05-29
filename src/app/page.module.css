@@ -37,6 +37,12 @@
   font-weight: 600;
 }
 
+.aiSection {
+  max-width: var(--measure);
+  padding-top: 32px;
+  border-top: 1px solid var(--hairline);
+}
+
 @media (max-width: 880px) {
   .page {
     padding: 40px 20px 72px;

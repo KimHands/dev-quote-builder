@@ -1,0 +1,157 @@
+.gate,
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gateLead,
+.label {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--body);
+  line-height: 1.5;
+}
+
+.label {
+  font-weight: 500;
+  color: var(--charcoal);
+}
+
+/* Terminal block — signature motif */
+.terminal {
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-card);
+  background: var(--dark);
+  overflow: hidden;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 9999px;
+}
+
+.red {
+  background: #ff5f56;
+}
+.yellow {
+  background: #ffbd2e;
+}
+.green {
+  background: #27c93f;
+}
+
+.barLabel {
+  margin-left: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--on-dark-mute);
+}
+
+.pre {
+  margin: 0;
+  padding: 18px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--on-dark);
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 2.5em;
+}
+
+.prompt {
+  color: #2997ff;
+  font-weight: 600;
+}
+
+.cursor {
+  color: #2997ff;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cursor {
+    animation: blink 1.05s steps(1) infinite;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.textarea {
+  font-family: inherit;
+  font-size: 0.9375rem;
+  padding: 12px 14px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 10px;
+  background: var(--canvas);
+  color: var(--ink);
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.submit,
+.kakao {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.submit {
+  background: var(--ink);
+  color: var(--canvas);
+}
+
+.kakao {
+  background: var(--accent);
+  color: var(--on-dark);
+}
+
+.submit:hover:not(:disabled),
+.kakao:hover {
+  opacity: 0.9;
+}
+
+.submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #ff5f56;
+}

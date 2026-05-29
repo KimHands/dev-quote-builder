@@ -1,4 +1,5 @@
 import { Configurator } from "@/components/Configurator";
+import { AiParser } from "@/components/AiParser";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -21,6 +22,10 @@ export default function Home() {
       </section>
 
       <Configurator />
+
+      <section className={styles.aiSection}>
+        <AiParser />
+      </section>
     </main>
   );
 }
