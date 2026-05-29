@@ -5,12 +5,27 @@ const TEST_DB = path.resolve(import.meta.dirname, "prisma/test.db");
 
 export default defineConfig({
   test: {
-    environment: "node",
-    env: { DATABASE_URL: `file:${TEST_DB}` },
-    globalSetup: "./tests/setup-db.ts",
-    include: ["tests/**/*.test.ts"],
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "node",
+          environment: "node",
+          include: ["tests/lib/**/*.test.ts", "tests/api/**/*.test.ts"],
+          env: { DATABASE_URL: `file:${TEST_DB}` },
+          globalSetup: "./tests/setup-db.ts",
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "dom",
+          environment: "jsdom",
+          include: ["tests/components/**/*.test.tsx"],
+          setupFiles: ["./tests/setup-dom.ts"],
+        },
+      },
+    ],
   },
-  resolve: {
-    alias: { "@": path.resolve(import.meta.dirname, "src") },
-  },
+  resolve: { alias: { "@": path.resolve(import.meta.dirname, "src") } },
 });
