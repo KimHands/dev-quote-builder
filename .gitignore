@@ -58,3 +58,6 @@ outreach-contacts.local.md
 *.contacts.local.md
 
 /src/generated/prisma
+
+# personal per-project Claude settings (local-only)
+.claude/settings.local.json
