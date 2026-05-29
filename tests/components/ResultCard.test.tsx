@@ -10,6 +10,7 @@ it("예산대 표시 + 포함 노출", () => {
 
 it("상담필요 분기 — 금액 미표시", () => {
   render(<ResultCard result={{ tier:"consult", consultNeeded:true, budgetLow:null, budgetHigh:null }} />);
-  expect(screen.getByText(/상담/)).toBeInTheDocument();
+  expect(screen.getByText("상담 필요")).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: /상담/ })).toBeInTheDocument();
   expect(screen.queryByText(/만원/)).not.toBeInTheDocument();
 });

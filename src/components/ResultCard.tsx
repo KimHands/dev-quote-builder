@@ -25,14 +25,14 @@ function ConsultView() {
     <div className={styles.consult}>
       <span className="seclabel">
         <span className="dot" />
-        직접 확인 필요
+        상담 필요
       </span>
       <p className={styles.consultLead}>
         선택하신 범위는 자동 산정 대신 짧은 대화로 정리하는 편이 정확합니다.
         리팩토링·급행·대규모 작업이 섞이면 일정과 비용이 크게 달라집니다.
       </p>
       <a className={styles.cta} href="#">
-        카톡으로 바로 문의하기
+        카톡으로 상담하기
       </a>
     </div>
   );
