@@ -1,0 +1,33 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.name {
+  font-size: 0.875rem;
+  color: var(--charcoal);
+}
+
+.pill {
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.pill:hover {
+  opacity: 0.88;
+}
+
+.ghost {
+  border-color: var(--charcoal);
+  background: transparent;
+  color: var(--ink);
+}

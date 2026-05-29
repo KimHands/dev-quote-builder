@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Providers } from "@/components/Providers";
+import { AuthButton } from "@/components/AuthButton";
 
 export const metadata: Metadata = {
   title: "개발 외주 견적 — 김종건",
@@ -21,7 +23,20 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendard-dynamic-subset.min.css"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <Providers>
+          <header
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              padding: "16px 24px",
+            }}
+          >
+            <AuthButton />
+          </header>
+          {children}
+        </Providers>
+      </body>
     </html>
   );
 }
