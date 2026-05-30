@@ -1,49 +1,38 @@
-# STATUS — 세션 핸드오프 (2026-05-30)
+# STATUS — 세션 핸드오프 (2026-05-30, 구현 단계)
 
-새 세션이 여기서 이어간다. 다음 작업: **구현 착수**(또는 plan-eng-review 재확인).
-grill-with-docs **완료** — 아래 6개 열린질문 전부 해결, CONTEXT.md/ADR 인라인 갱신됨.
+새 세션은 **이 파일 → CONTEXT.md → docs/adr/ → docs/superpowers/plans/** 순으로 읽고 이어간다.
 
-## 지금까지 (오늘 한 흐름)
-office-hours → grill-me → plan-eng-review → design-consultation → plan-design-review.
-전부 plan 단계. **코드는 아직 0줄.**
+## 한 줄 현황
+계획 5단계 + **구현 Plan 1~5 + QA 픽스 라운드 1** 전부 GitHub main에 머지·푸시 완료.
+앱은 동작(테스트 60/60, build OK). **미해결 2건**(아래) + 라이브 검증 일부 남음.
 
-## 무엇이 확정됐나
-- **제품:** 비개발자 대상 "집 짓기" 비유 자동견적 + 리드 풀스택 사이트. 학부생 1인 외주 수주용.
-- **스코프:** 풀스코프(견적저장+알림+공유링크+관리자+AI정리기+이메일). 정밀 엔진만 C단계. (ADR 0001/0007)
-- **스택:** Next.js 풀스택 + SQLite/Prisma + Auth.js 카카오 + mindlogic AI + Resend/Telegram. (ADR 0002/0003/0005)
-- **배포:** 개인 lab-server(Tailscale) → Cloudflare Tunnel + 커스텀 도메인, 관리자 Tailscale 전용. (ADR 0004)
-- **디자인:** 포트폴리오(KimHands.github.io) 토큰 통일. DESIGN.md 확정. (ADR 0006)
-- **가격/선금/세무:** 30-60/100-200/200-400만, 웜 5:5·플랫폼 에스크로, 무사업자 시작. (CONTEXT.md)
-- **리뷰 상태:** Eng CLEAR, Design CLEAR(4→8.5). Codex는 풀스코프에 반대했으나 유저 유지.
+## 무엇이 구현됐나 (전부 main, https://github.com/KimHands/dev-quote-builder)
+- **Plan 1 견적 엔진:** `lib/quote/`(classify 티어규칙·zod·types·format·labels·included), Quote 모델, `POST /api/quotes`(서버 재계산·shareId IDOR방지), `/q/[shareId]`.
+- **Plan 2 견적 UI:** 집짓기 선택(SelectionGroup×5 radiogroup + FeatureChecklist 7), 실시간 classify, ResultCard, QuoteForm, 랜딩 page, DESIGN.md 토큰.
+- **Plan 3 인증:** Auth.js v5 + 카카오 OAuth, User.role(admin), isAdmin/assertAdmin, AuthButton(서버액션 로그인), SessionProvider.
+- **Plan 4 AI 정리기:** mindlogic **OpenAI 호환**(`/chat/completions`, Bearer, model `claude-sonnet-4-6`, stream — 라이브 프로브로 확정), `/api/ai-parse`(로그인게이트·rate limit·입력cap·스트리밍·AiParse 기록), AiParser UI(게이트 미리보기+터미널).
+- **Plan 5 관리자+알림:** best-effort Resend/Telegram(`lib/notify`), `/admin`(isAdmin 가드, 리드목록, status 전이), status 상태머신.
+- **QA 라운드 1:** ResultCard에 선택요약+집짓기비유+구간안내 / 공유페이지 ResultCard 재사용 / 알림 await / 카카오 서버액션 로그인 / Pretendard CDN(MIME) 수정.
+
+## 🔴 미해결 (다음 세션 우선순위)
+1. **텔레그램 알림이 라우트 경유로 안 옴.** 봇·토큰·chatid 직접 curl은 정상("OK 전송"). `POST /api/quotes` 201(app-code 441ms = notify 실행됨)인데 폰에 안 옴 → `src/lib/notify/telegram.ts`의 fetch가 **조용히 실패**(best-effort라 삼킴). 의심: (a) Next 런타임의 `process.env.TELEGRAM_*` 값(.env에서 **따옴표로 감쌈**, dotenv가 잘 벗기는지) (b) **Next 라우트 핸들러의 서버사이드 외부 fetch 동작/샌드박스**. **디버그법:** `telegram.ts`/`email.ts`에 임시 `console.log(res.status, token길이)` 넣고 dev 로그 보며 제출 → 원인 확정 후 제거. (이메일도 같은 fetch 경로라 함께 확인 — Resend는 bible120120@naver.com으로만 발송 가능, 샌드박스.)
+2. **티어 밴딩 제품 결정.** 같은 구간 내 기능 추가 시 금액 불변(거친 3구간, ADR 0007 의도). 운영자가 "데모에서 신뢰 깎임" 우려. 대안: ⓐ구간 세분화 ⓑ예시 가산 표시 ⓒ현행유지. **운영자 결정 대기.**
+
+## 라이브 검증 상태 (.env 키 전부 SET, 운영자 확인 필요)
+- ✅ 텔레그램 봇 직접 발송 / mindlogic AI(라이브 프로브) / 견적 실시간 토글(새 서버에서 확인).
+- ⚠️ 카카오 실제 로그인(운영자 "로그인함"이라 했으나 redirect URI 등록·왕복 미확인) / 라우트 경유 알림(미해결 #1) / Resend 메일(naver로 변경, 미확인) / /admin(운영자 role='admin' 미지정 — 다음 세션에서 dev DB UPDATE 필요).
+
+## dev 서버 / 운영 메모
+- dev 서버 백그라운드 실행 중일 수 있음(task). **코드/`.env` 바꾸면 반드시 재시작**(Next는 시작 시 env 로드). `.env` 수정 후엔 `pkill -f "next dev"; rm -rf .next; npm run dev`.
+- ⚠️ **dev 서버 켜둔 채 `npm run build` 돌리지 말 것**(.next 충돌로 stale 번들 → 오늘 #1·#2 헛디버그 유발). 빌드는 서버 끄고.
+- 테스트 DB는 `prisma/test.db`(절대경로, vitest test.env). node 테스트는 `fileParallelism:false`(공유 SQLite 경합 방지).
+- Prisma 7: 생성 클라 `src/generated/prisma`(gitignore), libsql 어댑터, datasource url은 `prisma.config.ts`.
+- 마이그레이션: init_quote → add_auth_models → add_aiparse.
+
+## 다음 단계 (제안)
+1. 🔴 텔레그램/이메일 라우트 알림 디버그(임시 로깅→원인→수정). 2. 티어 밴딩 결정. 3. /admin용 role 지정 + 카카오 로그인 왕복 확인. 4. Plan 6 배포 산출물(Dockerfile·compose·litestream·cloudflared, 관리자 Tailscale 전용). 5. **(최우선·비코드) 아웃리치** — docs/outreach.md, 실명 5명.
 
 ## 문서 지도
-- [CONTEXT.md](../CONTEXT.md) — 도메인 모델·용어 (grill-with-docs 주 입력)
-- [docs/design.md](design.md) — 설계 정본(아키텍처+상태표+반응형/a11y+리뷰리포트)
-- [DESIGN.md](../DESIGN.md) — 디자인 시스템
-- [docs/adr/](adr/) — 결정 기록 0001~0008 (0008=shareId 공개URL)
-- [CLAUDE.md](../CLAUDE.md) — 프로젝트 지침
-- [TODOS.md](../TODOS.md) — C단계 엔진·크몽 등록
-- [docs/outreach.md](outreach.md) — **아웃리치 키트**(메시지 템플릿·퍼널 추적) ⭐1순위 과제
-- [docs/SETUP-CHECKLIST.md](SETUP-CHECKLIST.md) — 구현 전 외부 셋업(카카오·mindlogic·Cloudflare·Litestream·NDA)
-- 견적사이트_개발명세서.md — 원본 초안(참고용, 정본 아님)
-- gstack 정본: `~/.gstack/projects/dev-quote-builder/kimjonggun-main-design-20260530-000505.md`
-
-## grill-with-docs 결과 (2026-05-30, 전부 ✅) — 상세는 CONTEXT.md
-1. ✅ **Quote.status 상태머신:** new→contacted→proposed→contracted→done + lost(어디서든). queued/in_progress 제외(캐파는 운영규칙).
-2. ✅ **티어 분류 규칙:** 모듈 0/1~2/3+ → ①/②/③, 앱·중규모 상향, **리팩토링·급행·대규모 *하나라도* → 상담필요**(design.md "겹치면" 대체).
-3. ✅ **AI rate limit:** 사용자 10/일·3/분, IP 20/일, 입력 1,000자, 출력 1,500토큰, **전역 킬스위치 200/일→비활성+핑**.
-4. ✅ **결과물 포맷:** 공유링크 `/q/{shareId}`(주) + 동적 OG 카드(카톡 미리보기). PDF 연기.
-5. ✅ **ADR 0005 재검증:** 유지 + 보정 2개(비대칭 명문화, 게이트 앞 값 미리보기).
-6. ✅ **엔티티 스키마:** User/Quote/AiParse 확정. 공개 URL=shareId(IDOR 방지) → **ADR 0008 신규**.
-
-## 여전히 열린 (실세계 액션 — 설계 아님)
-- ⚠️ 포트폴리오 3개(ClassFileAuto·likelion-sch.com·Hedgehog WebCTF) 공개 동의/NDA 확인.
-
-## 구현 전 필수 체크 (코드 시작 전)
-- 🔴 **Litestream 백업** 구성(리드 단일 실패점) — ADR 0003.
-- ⚠️ 포트폴리오 3개(ClassFileAuto·likelion-sch.com·Hedgehog WebCTF) 공개 동의/NDA 확인.
-- 🟡 mindlogic AIHub **API 키 발급** + 쿼터 가이드 확인.
-- 🟡 카카오 개발자 앱 등록(OAuth 키), Cloudflare 도메인.
-
-## 비-코드 과제 (office-hours, 여전히 유효)
-실명 30명 → 5명에게 **가격 없는** 메시지 → 첫 상담 1건. 사이트 완성 기다리지 말 것.
+- CONTEXT.md(도메인·티어규칙·status·엔티티) · docs/adr/0001~0008 · docs/design.md · DESIGN.md
+- docs/superpowers/plans/2026-05-30-*.md (foundation-quote-engine·quote-ui·auth-kakao·ai-parser·admin-notify)
+- docs/outreach.md(아웃리치 키트) · docs/SETUP-CHECKLIST.md(외부 키)
