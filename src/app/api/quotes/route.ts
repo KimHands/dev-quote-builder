@@ -37,9 +37,10 @@ export async function POST(request: Request) {
     },
   });
 
-  // best-effort 알림: 리드 저장이 임계경로. await 하지 않고 자체 catch로
-  // 어떤 실패/throw도 응답에 영향 주지 못하게 한다.
-  void notifyNewLead({
+  // best-effort 알림: 리드 저장이 임계경로. await로 응답 전 발송 완료를 보장하되
+  // (fire-and-forget는 서버리스성 환경에서 응답 후 끊겨 누락됨), 자체 catch로
+  // 어떤 실패/throw도 응답(201)에 영향 주지 못하게 한다.
+  await notifyNewLead({
     shareId: quote.shareId,
     tier: quote.tier,
     consultNeeded: quote.consultNeeded,
