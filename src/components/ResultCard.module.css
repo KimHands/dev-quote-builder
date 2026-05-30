@@ -121,6 +121,53 @@
   opacity: 0.9;
 }
 
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 16px 0 0;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.summaryRow {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin: 0;
+}
+
+.summaryKey {
+  flex: 0 0 64px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.summaryVal {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--charcoal);
+  line-height: 1.4;
+}
+
+.metaphor {
+  margin: 14px 0 0;
+  font-size: 0.9375rem;
+  color: var(--body);
+  line-height: 1.5;
+}
+
+.banding {
+  margin: 8px 0 0;
+  font-size: 0.8125rem;
+  color: var(--mute);
+  line-height: 1.5;
+}
+
 .footer {
   margin: 0;
   padding-top: 4px;

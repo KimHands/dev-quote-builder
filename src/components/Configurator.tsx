@@ -69,7 +69,7 @@ export function Configurator() {
       </div>
 
       <div className={styles.result}>
-        <ResultCard result={result} />
+        <ResultCard result={result} selections={selections} />
         <QuoteForm selections={selections} />
       </div>
     </div>
