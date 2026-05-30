@@ -1,22 +1,74 @@
 "use client";
 
-import type { QuoteResult } from "@/lib/quote/types";
+import type { QuoteResult, Selections, Tier } from "@/lib/quote/types";
 import { wonRange } from "@/lib/quote/format";
 import { INCLUDED, EXCLUDED } from "@/lib/quote/included";
+import {
+  OPTION_LABELS,
+  AXIS_ORDER,
+  FEATURE_LABELS,
+  FEATURE_ORDER,
+} from "@/lib/quote/labels";
 import styles from "./ResultCard.module.css";
 
-type Props = { result: QuoteResult };
+type Props = { result: QuoteResult; selections: Selections };
 
 const FOOTER = "정확한 견적은 20분 상담 후 확정됩니다.";
 
-export function ResultCard({ result }: Props) {
+const METAPHOR: Record<Tier, string> = {
+  landing: "한 페이지 소개·연락 중심의 작은 집을 짓는 규모예요.",
+  mvp: "꼭 필요한 핵심 기능 1~2개로 시작하는 집이에요.",
+  full: "여러 기능이 어우러진 큰 집 — 설계·시공 규모가 커집니다.",
+  consult: "도면부터 함께 그려야 하는 집이라, 짧은 상담이 필요해요.",
+};
+
+const BANDING_NOTE =
+  "기능을 더 골라도 같은 예산 구간일 수 있어요. 정확한 금액은 20분 상담에서 확정합니다.";
+
+export function ResultCard({ result, selections }: Props) {
   return (
     <section className={styles.card}>
       <div className={styles.live} aria-live="polite">
         {result.consultNeeded ? <ConsultView /> : <BudgetView result={result} />}
+        <SelectionSummary selections={selections} />
+        <Metaphor tier={result.tier} />
+        <p className={styles.banding}>{BANDING_NOTE}</p>
       </div>
       <p className={styles.footer}>{FOOTER}</p>
     </section>
+  );
+}
+
+function Metaphor({ tier }: { tier: Tier }) {
+  return <p className={styles.metaphor}>{METAPHOR[tier]}</p>;
+}
+
+function SelectionSummary({ selections }: { selections: Selections }) {
+  const axisLabels: Record<(typeof AXIS_ORDER)[number], string> = {
+    platform: OPTION_LABELS.platform[selections.platform],
+    audience: OPTION_LABELS.audience[selections.audience],
+    scale: OPTION_LABELS.scale[selections.scale],
+    code: OPTION_LABELS.code[selections.code],
+    urgency: OPTION_LABELS.urgency[selections.urgency],
+  };
+  const feats = FEATURE_ORDER.filter((key) => selections.feats[key]).map(
+    (key) => FEATURE_LABELS[key],
+  );
+  return (
+    <dl className={styles.summary}>
+      {AXIS_ORDER.map((axis) => (
+        <div key={axis} className={styles.summaryRow}>
+          <dt className={styles.summaryKey}>{axis}</dt>
+          <dd className={styles.summaryVal}>{axisLabels[axis]}</dd>
+        </div>
+      ))}
+      <div className={styles.summaryRow}>
+        <dt className={styles.summaryKey}>feats</dt>
+        <dd className={styles.summaryVal}>
+          {feats.length ? feats.join(", ") : "기능 없음"}
+        </dd>
+      </div>
+    </dl>
   );
 }
 

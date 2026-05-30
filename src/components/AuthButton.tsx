@@ -1,6 +1,7 @@
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { signInKakao, signOutAction } from "@/app/auth-actions";
 import styles from "./AuthButton.module.css";
 
 export function AuthButton() {
@@ -10,16 +11,20 @@ export function AuthButton() {
     return (
       <span className={styles.wrap}>
         {session?.user?.name && <span className={styles.name}>{session.user.name}</span>}
-        <button className={`${styles.pill} ${styles.ghost}`} onClick={() => signOut()}>
-          로그아웃
-        </button>
+        <form action={signOutAction}>
+          <button className={`${styles.pill} ${styles.ghost}`} type="submit">
+            로그아웃
+          </button>
+        </form>
       </span>
     );
   }
 
   return (
-    <button className={styles.pill} onClick={() => signIn("kakao")}>
-      카카오로 로그인
-    </button>
+    <form action={signInKakao}>
+      <button className={styles.pill} type="submit">
+        카카오로 로그인
+      </button>
+    </form>
   );
 }

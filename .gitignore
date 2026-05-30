@@ -61,3 +61,4 @@ outreach-contacts.local.md
 
 # personal per-project Claude settings (local-only)
 .claude/settings.local.json
+.gstack/
