@@ -6,6 +6,7 @@ vi.mock("next-auth/react", () => ({
   signIn: vi.fn(),
   signOut: vi.fn(),
 }));
+vi.mock("@/app/auth-actions", () => ({ signInKakao: vi.fn(), signOutAction: vi.fn() }));
 import { useSession } from "next-auth/react";
 import { AuthButton } from "@/components/AuthButton";
 
